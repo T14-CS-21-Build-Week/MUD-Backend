@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from decouple import config
+import dj_database_url
 
+
+#We don't know
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,9 +25,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = 'zh5ai@6c^cd&t%whb-noxi#01%1#u&rh(0o5x@^#cgt6)mne('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
+# DEBUG = True
+
+
 
 ALLOWED_HOSTS = []
 
@@ -93,8 +100,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'heroku': {
+
     }
 }
+
+#Database url
+# dj_database_url.config(default=config('DATABASE_URL'))
 
 
 # Password validation
@@ -148,6 +161,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+#Not sure about this one
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 import django_heroku
 django_heroku.settings(locals())
+
+#WHO KNOWS WHAT THIS DOES
+del DATABASES['default']['OPTIONS']['sslmode']
