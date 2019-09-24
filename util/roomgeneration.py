@@ -4,7 +4,7 @@
 # You can modify generate_rooms() to create your own
 # procedural generation algorithm and use print_rooms()
 # to see the world.
-
+import random
 
 class Room:
     def __init__(self, id, name, description, x, y):
@@ -54,31 +54,70 @@ class World:
             self.grid[i] = [None] * size_x
 
         # Start from lower-left corner (0,0)
-        x = -1 # (this will become 0 on the first step)
+        x = 0 # (this will become 0 on the first step)
         y = 0
         room_count = 0
 
         # Start generating rooms to the east
-        direction = 1  # 1: east, -1: west
+        direction = [-1, 1]  # -1 = south or west, 1 = north or east
+        vertical_or_horizontal = ['x', 'y']
 
+        # size_x - 1 == eastern wall
+        # x = 0 == western wall
+        # size_y - 1 == northern wall
+        # y = 0 == southern wall
 
-        # While there are rooms to be created...
+        # While the room count is less than the current number of rooms
+        # Navigate randomly (within the set grid boundary) and create rooms/connections accordingly
         previous_room = None
         while room_count < num_rooms:
 
-            # Calculate the direction of the room to be created
-            if direction > 0 and x < size_x - 1:
-                room_direction = "e"
-                x += 1
-            elif direction < 0 and x > 0:
-                room_direction = "w"
-                x -= 1
-            else:
-                # If we hit a wall, turn north and reverse direction
-                room_direction = "n"
-                y += 1
-                direction *= -1
+            ## Pick a direction (x or y) for movement
+            ## Generate -1 or 1 randomly
+            one_or_negative_one = random.choice(direction)
+            x_or_y = random.choice(vertical_or_horizontal)
 
+        
+            if x_or_y == 'x':    #we are moving east or west
+                if one_or_negative_one == 1: #moving east
+                    if x < (size_x - 1):
+                        room_direction = "e"
+                        x += 1
+                    else:
+                        #re-do 
+                else:    #moving west
+                    if x > 0:
+                        room_direction = "w"
+                        x -= 1
+                    else:
+
+            elif x_or_y == 'y':  #we are moving north or south
+                if one_or_negative_one == 1: #moving north
+                    if y < (size_y - 1):
+                        room_direction = "n"
+                        y += 1
+                    else: 
+
+                else: #moving south
+                    if y > 0:
+                        room_direction = "s"
+                        y -= 1
+                    else:
+
+    
+                ## Function Room Check / Connection Creation
+                ## Check if theres a room here
+                    ## If not, make one
+                    ## If there is, check if there is a connection to the previous room
+                        ## If not, make one
+
+                ## Function Move
+                ## Check to make sure the movement won't hit a wall
+                    ## If it does, try a different direction
+            
+
+
+            
             # Create a room in the given direction
             room = Room(room_count, "A Generic Room", "This is a generic room.", x, y)
             # Note that in Django, you'll need to save the room after you create it

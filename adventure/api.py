@@ -68,3 +68,9 @@ def say(request):
     # IMPLEMENT
     # ?? Possibly -- You will also need to implement a GET rooms API endpoint for clients to fetch all rooms to display a map on the frontend. 
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+
+    ''' 
+    Implement a rooms endpoint which returns data for every room in the world. We need to build a map to display the relevant
+    data from these rooms, like which room the player is currently in. 
+    '''
