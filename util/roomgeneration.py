@@ -62,18 +62,20 @@ class World:
         direction = [-1, 1]  # -1 = south or west, 1 = north or east
         vertical_or_horizontal = ['x', 'y']
 
-        # size_x - 1 == eastern wall
-        # x = 0 == western wall
-        # size_y - 1 == northern wall
-        # y = 0 == southern wall
+        room = Room(room_count, "A Generic Title for a Room", "This is a room.", x, y)
+        self.grid[y][x] = room
+        room_count += 1
 
         # While the room count is less than the current number of rooms
         # Navigate randomly (within the set grid boundary) and create rooms/connections accordingly
-        previous_room = None
+        previous_room = room
+        
         while room_count < num_rooms:
-
+            print("STARTING AT", x, y)
+            print("Room count: ", room_count)
             ## Pick a direction (x or y) for movement
             ## Generate -1 or 1 randomly
+            hit_a_wall = False
             one_or_negative_one = random.choice(direction)
             x_or_y = random.choice(vertical_or_horizontal)
 
@@ -83,55 +85,74 @@ class World:
                     if x < (size_x - 1):
                         room_direction = "e"
                         x += 1
+                        print("Moved to: ", x, y)
                     else:
                         print('ran into a wall')
-                        pass
+                        print("Moved to: ", x, y)
+                        hit_a_wall = True
+
                 else:    #moving west
                     if x > 0:
                         room_direction = "w"
                         x -= 1
+                        print("Moved to: ", x, y)
                     else:
                         print('ran into a wall')
-                        pass
+                        print("Moved to: ", x, y)
+                        hit_a_wall = True
+
             elif x_or_y == 'y':  #we are moving north or south
                 if one_or_negative_one == 1: #moving north
                     if y < (size_y - 1):
+    
                         room_direction = "n"
                         y += 1
-                    else: 
+                        print("Moved to: ", x, y)
+                    else:
+                        
                         print('ran into a wall')
-                        pass
+                        print("Moved to: ", x, y)
+                        hit_a_wall = True
                 else: #moving south
                     if y > 0:
+                        
                         room_direction = "s"
                         y -= 1
+                        print("Moved to: ", x, y)
                     else:
+                       
                         print('ran into a wall')
-                        pass
+                        print("Moved to: ", x, y)
+                        hit_a_wall = True
 
-                #check to see if there is a room after moving
-                if self.grid[y][x] is not None:
-                    print('There is a room here')
-                    #connect the room to the previous one
-                    if previous_room is not None:
-                        previous_room.connect_rooms(self.grid[y][x], room_direction)
-                    previous_room = self.grid[y][x]
+            #check to see if there is a room after moving
+            if hit_a_wall == False and self.grid[y][x] is not None:
+                print('There is a room here')
+                #connect the room to the previous one
+                if previous_room is not None:
+                    previous_room.connect_rooms(self.grid[y][x], room_direction)
+                previous_room = self.grid[y][x]
 
-                #if there is no room after moving
-                else:
-                    #create a room
-                    room = Room(room_count, "A Generic Title for a Room", "This is a room.", x, y)
+            #if there is no room after moving
+            elif hit_a_wall == False and self.grid[y][x] is None:
+                #create a room
+                print('Creating a new room at, ', x, y)
+                room = Room(room_count, "A Generic Title for a Room", "This is a room.", x, y)
 
-                    #save the room in the grid
-                    self.grid[y][x] = room
+                #save the room in the grid
+                self.grid[y][x] = room
 
-                    #connect the room to the previous one
-                    if previous_room is not None:
-                        previous_room.connect_rooms(room, room_direction)
-                    
-                    #because we created a room, increment room_count and update previous_room
-                    previous_room = room
-                    room_count += 1
+                #connect the room to the previous one
+                if previous_room is not None:
+                    previous_room.connect_rooms(room, room_direction)
+                
+                #because we created a room, increment room_count and update previous_room
+                previous_room = room
+                room_count += 1
+            else:
+                print("Final Else statement")
+                print("Self.grid", self.grid[y][x])
+                pass
             
             # # Create a room in the given direction
             # room = Room(room_count, "A Generic Room", "This is a generic room.", x, y)
@@ -206,9 +227,9 @@ class World:
 
 
 w = World()
-num_rooms = 44
-width = 8
-height = 7
+num_rooms = 150
+width = 20
+height = 20
 w.generate_rooms(width, height, num_rooms)
 w.print_rooms()
 
