@@ -54,8 +54,8 @@ class World:
             self.grid[i] = [None] * size_x
 
         # Start from lower-left corner (0,0)
-        x = 0 # (this will become 0 on the first step)
-        y = 0
+        x = (size_x//2) # (this will become 0 on the first step)
+        y = (size_y//2)
         room_count = 0
 
         # Start generating rooms to the east
@@ -84,54 +84,69 @@ class World:
                         room_direction = "e"
                         x += 1
                     else:
-                        #re-do 
+                        print('ran into a wall')
+                        pass
                 else:    #moving west
                     if x > 0:
                         room_direction = "w"
                         x -= 1
                     else:
-
+                        print('ran into a wall')
+                        pass
             elif x_or_y == 'y':  #we are moving north or south
                 if one_or_negative_one == 1: #moving north
                     if y < (size_y - 1):
                         room_direction = "n"
                         y += 1
                     else: 
-
+                        print('ran into a wall')
+                        pass
                 else: #moving south
                     if y > 0:
                         room_direction = "s"
                         y -= 1
                     else:
+                        print('ran into a wall')
+                        pass
 
-    
-                ## Function Room Check / Connection Creation
-                ## Check if theres a room here
-                    ## If not, make one
-                    ## If there is, check if there is a connection to the previous room
-                        ## If not, make one
+                #check to see if there is a room after moving
+                if self.grid[y][x] is not None:
+                    print('There is a room here')
+                    #connect the room to the previous one
+                    if previous_room is not None:
+                        previous_room.connect_rooms(self.grid[y][x], room_direction)
+                    previous_room = self.grid[y][x]
 
-                ## Function Move
-                ## Check to make sure the movement won't hit a wall
-                    ## If it does, try a different direction
+                #if there is no room after moving
+                else:
+                    #create a room
+                    room = Room(room_count, "A Generic Title for a Room", "This is a room.", x, y)
+
+                    #save the room in the grid
+                    self.grid[y][x] = room
+
+                    #connect the room to the previous one
+                    if previous_room is not None:
+                        previous_room.connect_rooms(room, room_direction)
+                    
+                    #because we created a room, increment room_count and update previous_room
+                    previous_room = room
+                    room_count += 1
             
+            # # Create a room in the given direction
+            # room = Room(room_count, "A Generic Room", "This is a generic room.", x, y)
+            # # Note that in Django, you'll need to save the room after you create it
 
+            # # Save the room in the World grid
+            # self.grid[y][x] = room
 
-            
-            # Create a room in the given direction
-            room = Room(room_count, "A Generic Room", "This is a generic room.", x, y)
-            # Note that in Django, you'll need to save the room after you create it
+            # # Connect the new room to the previous room
+            # if previous_room is not None:
+            #     previous_room.connect_rooms(room, room_direction)
 
-            # Save the room in the World grid
-            self.grid[y][x] = room
-
-            # Connect the new room to the previous room
-            if previous_room is not None:
-                previous_room.connect_rooms(room, room_direction)
-
-            # Update iteration variables
-            previous_room = room
-            room_count += 1
+            # # Update iteration variables
+            # previous_room = room
+            # room_count += 1
 
 
 
