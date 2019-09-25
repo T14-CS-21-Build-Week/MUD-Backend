@@ -6,6 +6,7 @@ from decouple import config
 from django.contrib.auth.models import User
 from .models import *
 from rest_framework.decorators import api_view
+from .serializer import RoomSerializer
 import json
 
 # instantiate pusher
@@ -23,6 +24,16 @@ def initialize(request):
     room = player.room()
     players = room.playerNames(player_id)
     return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players}, safe=True)
+
+@csrf_exempt
+@api_view(["GET"])
+def get_rooms(request):
+    rooms = Room.objects.all()
+    serializer = RoomSerializer(rooms, many=True)
+    if request.user:
+        return JsonResponse(serializer.data, safe=False, status=200)
+    else:
+        return JsonResponse({'error':"Not authorized"}, safe=True, status=403)
 
 
 # @csrf_exempt
