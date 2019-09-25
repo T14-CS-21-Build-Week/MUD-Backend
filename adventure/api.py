@@ -11,6 +11,8 @@ import json
 # instantiate pusher
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
+
+# .GET to /api/adv/init -- Returns player information -- Requires a logged in user
 @csrf_exempt
 @api_view(["GET"])
 def initialize(request):
@@ -64,4 +66,11 @@ def move(request):
 @api_view(["POST"])
 def say(request):
     # IMPLEMENT
+    # ?? Possibly -- You will also need to implement a GET rooms API endpoint for clients to fetch all rooms to display a map on the frontend. 
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+
+    ''' 
+    Implement a rooms endpoint which returns data for every room in the world. We need to build a map to display the relevant
+    data from these rooms, like which room the player is currently in. 
+    '''

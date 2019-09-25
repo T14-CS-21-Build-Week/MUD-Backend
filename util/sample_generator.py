@@ -27,8 +27,8 @@ class Room:
         '''
         reverse_dirs = {"n": "s", "s": "n", "e": "w", "w": "e"}
         reverse_dir = reverse_dirs[direction]
-        setattr(self, f"{direction}_to", connecting_room)
-        setattr(connecting_room, f"{reverse_dir}_to", self)
+        setattr(self, f"{direction}_to", connecting_room) #pointers in a doubly linked list
+        setattr(connecting_room, f"{reverse_dir}_to", self) # pointers in a doubly linked list
     def get_room_in_direction(self, direction):
         '''
         Connect two rooms in the given n/s/e/w direction
@@ -45,7 +45,7 @@ class World:
         '''
         Fill up the grid, bottom to top, in a zig-zag pattern
         '''
-
+        
         # Initialize the grid
         self.grid = [None] * size_y
         self.width = size_x
@@ -60,17 +60,19 @@ class World:
 
         # Start generating rooms to the east
         direction = 1  # 1: east, -1: west
-
+        ''' This might be a potential place to change for changing directions '''
 
         # While there are rooms to be created...
         previous_room = None
         while room_count < num_rooms:
 
             # Calculate the direction of the room to be created
-            if direction > 0 and x < size_x - 1:
+            if direction > 0 and x < size_x - 1: 
+                ''' size_x - 1 is the eastern wall '''
                 room_direction = "e"
                 x += 1
-            elif direction < 0 and x > 0:
+            elif direction < 0 and x > 0: 
+                ''' x must be greater than zero, x = 0 is the western wall '''
                 room_direction = "w"
                 x -= 1
             else:
@@ -157,6 +159,7 @@ width = 8
 height = 7
 w.generate_rooms(width, height, num_rooms)
 w.print_rooms()
+# print(w.checkRoom(0,0))
 
 
 print(f"\n\nWorld\n  height: {height}\n  width: {width},\n  num_rooms: {num_rooms}\n")

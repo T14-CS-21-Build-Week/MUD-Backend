@@ -33,7 +33,10 @@ DEBUG = config('DEBUG', cast=bool)
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -101,15 +104,10 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # },
-    # 'heroku': {
-
-    # }
 }
 
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
-#Database url
-# dj_database_url.config(default=config('DATABASE_URL'))
 
 
 # Password validation
