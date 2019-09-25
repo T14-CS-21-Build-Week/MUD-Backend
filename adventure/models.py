@@ -41,8 +41,12 @@ class Room(models.Model):
         '''
         reverse_dirs = {"n": "s", "s": "n", "e": "w", "w": "e"}
         reverse_dir = reverse_dirs[direction]
-        setattr(self, f"{direction}_to", connecting_room)
-        setattr(connecting_room, f"{reverse_dir}_to", self)
+
+        connecting_roomID = connecting_room.id
+
+        setattr(self, f"{direction}_to", connecting_roomID)
+        setattr(connecting_room, f"{reverse_dir}_to", self.id)
+        self.save()
 
     def playerNames(self, currentPlayerID):
         return [p.user.username for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
