@@ -4,7 +4,9 @@ Make migrations, run them, and check the database to make sure the schema is cor
 Once you do so, run `.\manage.py shell` to open the server environment, and copy + paste the contents of `/util/roomgen.py` into the interpreter.
 The right response is ***No response***
 
-If you see errors, make sure the dependencies are installed correctly.
+If you see errors, make sure the dependencies are installed correctly. 
+
+Check your results either by accessing the database with `.\manage.py dbshell` or by running a `GET` to `/api/adv/rooms/` with Insomnia or Postman
 
 
 # CS Build Week 1
