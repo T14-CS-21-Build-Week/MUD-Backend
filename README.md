@@ -1,3 +1,14 @@
+# Notes for this Repo
+If you want to launch your own local server populated with rooms, you'll have to install the dependencies, and launch a pipenv shell.
+Make migrations, run them, and check the database to make sure the schema is correct. 
+Once you do so, run `.\manage.py shell` to open the server environment, and copy + paste the contents of `/util/roomgen.py` into the interpreter.
+The right response is ***No response***
+
+If you see errors, make sure the dependencies are installed correctly. 
+
+Check your results either by accessing the database with `.\manage.py dbshell` or by running a `GET` to `/api/adv/rooms/` with Insomnia or Postman
+
+
 # CS Build Week 1
 
 For your first CS Build Week, you will be building an interactive ***Multi-User Dungeon (MUD)*** client and server in groups. To succeed with this project, you will be applying knowledge you've learned throughout the first part of CS to this project.
