@@ -153,7 +153,7 @@ class World:
         print(str)
 
 
-w = World()
+w=World()
 num_rooms = 44
 width = 8
 height = 7
