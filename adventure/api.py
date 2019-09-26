@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-# from pusher import Pusher
+from pusher import Pusher
 from django.http import JsonResponse
 from decouple import config
 from django.contrib.auth.models import User
@@ -10,7 +10,7 @@ from .serializer import RoomSerializer
 import json
 
 # instantiate pusher
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
 
 # .GET to /api/adv/init -- Returns player information -- Requires a logged in user
@@ -63,10 +63,10 @@ def move(request):
         players = nextRoom.playerNames(player_id)
         currentPlayerUUIDs = room.playerUUIDs(player_id)
         nextPlayerUUIDs = nextRoom.playerUUIDs(player_id)
-        # for p_uuid in currentPlayerUUIDs:
-        #     pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has walked {dirs[direction]}.'})
-        # for p_uuid in nextPlayerUUIDs:
-        #     pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has entered from the {reverse_dirs[direction]}.'})
+        for p_uuid in currentPlayerUUIDs:
+            pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has walked {dirs[direction]}.', 'type': False})
+        for p_uuid in nextPlayerUUIDs:
+            pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has entered from the {reverse_dirs[direction]}.', 'type': False})
         return JsonResponse({'name':player.user.username, 'title':nextRoom.title, 'description':nextRoom.description, 'players':players, 'error_msg':"", 'x': nextRoom.x, 'y': nextRoom.y}, safe=True)
     else:
         players = room.playerNames(player_id)
@@ -77,11 +77,15 @@ def move(request):
 @api_view(["POST"])
 def say(request):
     # IMPLEMENT
-    # ?? Possibly -- You will also need to implement a GET rooms API endpoint for clients to fetch all rooms to display a map on the frontend. 
-    return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
-
-
-    ''' 
-    Implement a rooms endpoint which returns data for every room in the world. We need to build a map to display the relevant
-    data from these rooms, like which room the player is currently in. 
-    '''
+    player = request.user.player
+    room = player.room()
+    player_id = player.id
+    data = json.loads(request.body)
+    chatmessage = data['chatmessage']
+    if data['chatmessage'] is not None:
+        currentPlayerUUIDs = room.playerUUIDs(player_id)
+        for p_uuid in currentPlayerUUIDs:
+            pusher.trigger(f'p-channel-{p_uuid}', u'chatter',{'chatuser':f'{player.user.username}', 'chatmessage': f'{chatmessage}', 'type': True})
+        return JsonResponse({'message': "Chat message was sent successfully.", "player": player.user.username}, safe=True, status=200)
+    else:
+        return JsonResponse({'error':"Error sending message"}, safe=True, status=500)
