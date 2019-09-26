@@ -80,12 +80,14 @@ def say(request):
     player = request.user.player
     room = player.room()
     player_id = player.id
+    player_uuid = player.uuid
     data = json.loads(request.body)
     chatmessage = data['chatmessage']
     if data['chatmessage'] is not None:
         currentPlayerUUIDs = room.playerUUIDs(player_id)
         for p_uuid in currentPlayerUUIDs:
             pusher.trigger(f'p-channel-{p_uuid}', u'chatter',{'chatuser':f'{player.user.username}', 'chatmessage': f'{chatmessage}', 'type': True})
+        pusher.trigger(f'p-channel-{player_uuid}', u'chatter',{'chatuser':f'{player.user.username}', 'chatmessage': f'{chatmessage}', 'type': True})
         return JsonResponse({'message': "Chat message was sent successfully.", "player": player.user.username}, safe=True, status=200)
     else:
         return JsonResponse({'error':"Error sending message"}, safe=True, status=500)
