@@ -151,6 +151,15 @@ class World:
                 #if we hit this, we hit a wall. So try choosing another direction
                 pass
 
+        if self.grid[start_y + 1][start_x] is not None:
+          firstroom.connect_rooms(self.grid[start_y + 1][start_x], 'n')
+        if self.grid[start_y - 1][start_x] is not None:
+          firstroom.connect_rooms(self.grid[start_y - 1][start_x], 's')
+        if self.grid[start_y][start_x + 1] is not None:
+          firstroom.connect_rooms(self.grid[start_y][start_x + 1], 'e')
+        if self.grid[start_y][start_x - 1] is not None:
+          firstroom.connect_rooms(self.grid[start_y][start_x - 1], 'w')
+
         players = Player.objects.all()
         for p in players:
             p.currentRoom=firstroom.id
