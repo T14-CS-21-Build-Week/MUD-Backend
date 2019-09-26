@@ -5,8 +5,8 @@ class RoomSerializer(serializers.Serializer):
     description = serializers.CharField(max_length=500, default="DEFAULT DESCRIPTION")
     x = serializers.IntegerField(default=0)
     y = serializers.IntegerField(default=0)
-    n_to = serializers.IntegerField(default=0)
-    s_to = serializers.IntegerField(default=0)
-    e_to = serializers.IntegerField(default=0)
-    w_to = serializers.IntegerField(default=0)
+    n_to = serializers.IntegerField(default=-1)
+    s_to = serializers.IntegerField(default=-1)
+    e_to = serializers.IntegerField(default=-1)
+    w_to = serializers.IntegerField(default=-1)
     # Possibly items

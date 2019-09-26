@@ -21,6 +21,8 @@ class World:
       self.grid[i] = [None] * size_x
     x = (size_x//2) 
     y = (size_y//2)
+    start_x = x
+    start_y = y
     room_count = 0
     direction = [-1, 1]
     vertical_or_horizontal = ['x', 'y']

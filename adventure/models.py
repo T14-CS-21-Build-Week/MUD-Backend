@@ -10,10 +10,10 @@ class Room(models.Model):
     description = models.CharField(max_length=500, default="DEFAULT DESCRIPTION")
     x = models.IntegerField(default=0)
     y = models.IntegerField(default=0)
-    n_to = models.IntegerField(default=0)
-    s_to = models.IntegerField(default=0)
-    e_to = models.IntegerField(default=0)
-    w_to = models.IntegerField(default=0)
+    n_to = models.IntegerField(default=-1)
+    s_to = models.IntegerField(default=-1)
+    e_to = models.IntegerField(default=-1)
+    w_to = models.IntegerField(default=-1)
 
     def connect_rooms(self, connecting_room, direction):
         '''

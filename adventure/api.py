@@ -23,7 +23,7 @@ def initialize(request):
     uuid = player.uuid
     room = player.room()
     players = room.playerNames(player_id)
-    return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'x': room.x, 'y': room.y, 'players':players}, safe=True)
+    return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'x': room.x, 'y': room.y, 'n_to': room.n_to, 'e_to': room.e_to, 'w_to': room.w_to, 's_to': room.s_to, 'players':players}, safe=True)
 
 @csrf_exempt
 @api_view(["GET"])
@@ -56,7 +56,7 @@ def move(request):
         nextRoomID = room.e_to
     elif direction == "w":
         nextRoomID = room.w_to
-    if nextRoomID is not None and nextRoomID > 0:
+    if nextRoomID is not None and nextRoomID >= 0:
         nextRoom = Room.objects.get(id=nextRoomID)
         player.currentRoom=nextRoomID
         player.save()
