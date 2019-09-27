@@ -8,7 +8,7 @@ If you see errors, make sure the dependencies are installed correctly.
 
 Check your results either by accessing the database with `.\manage.py dbshell` or by running a `GET` to `/api/adv/rooms/` with Insomnia or Postman
 
-*** Data Structures ***
+***Data Structures***
 
 We imployed the use of a Graph for the front end visualization of the map because it made rendering it simple, with the added bonus of providing an easy way of keeping track of the player movement with a second graph (of only one node) overlayed on the first. Using a static graph with a changing one on top makes our map movements very efficient in terms of render times, because of one node is rerendered every time a player moves. 
 
