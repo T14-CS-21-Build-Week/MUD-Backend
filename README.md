@@ -8,6 +8,14 @@ If you see errors, make sure the dependencies are installed correctly.
 
 Check your results either by accessing the database with `.\manage.py dbshell` or by running a `GET` to `/api/adv/rooms/` with Insomnia or Postman
 
+*** Data Structures ***
+
+We imployed the use of a Graph for the front end visualization of the map because it made rendering it simple, with the added bonus of providing an easy way of keeping track of the player movement with a second graph (of only one node) overlayed on the first. Using a static graph with a changing one on top makes our map movements very efficient in terms of render times, because of one node is rerendered every time a player moves. 
+
+A grid was used to generate the (x, y) coordinates needed for the graph in our room generation algorithm. Once the grid was populated with rooms, we passed the x, y values to the front end and then iterated through them one by one to create our graph.
+
+We also used lots of lists(arrays in JS) to keep track of data throughout this project. One of the places in particular we employed the use of arrays was for the chat messages on the Front-End. Both `event messages` and `chat messages` were stored in the same array with a boolean identifier as to what type they were (type = T/F). The boolean dictates what color they appear, and then simply slicing out the last 6 messages from the array of chat messages for displaying purposes makes the chat appear to be scrolling up as new messages are added, which is really neat. Arrays made this sort of effect incredibly straightforward in tandem with React state management.
+
 
 # CS Build Week 1
 
